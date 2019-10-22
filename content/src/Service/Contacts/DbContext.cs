@@ -6,7 +6,7 @@ namespace MyVendor.MyService
 {
     public partial class DbContext
     {
-        public DbSet<ContactEntity> Contacts { get; set; }
-        public DbSet<PokeEntity> Pokes { get; set; }
+        public DbSet<ContactEntity> Contacts { get; set; } = default!;
+        public DbSet<PokeEntity> Pokes { get; set; } = default!;
     }
 }

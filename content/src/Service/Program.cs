@@ -1,9 +1,8 @@
-using System;
 using Axoom.Extensions.Logging.Console;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace MyVendor.MyService
@@ -13,49 +12,30 @@ namespace MyVendor.MyService
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
-            RunInitTasks(host);
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         [PublicAPI]
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-            => new WebHostBuilder()
-              .UseKestrel()
-              .ConfigureAppConfiguration((context, builder) =>
-               {
-                   var env = context.HostingEnvironment;
-                   builder.SetBasePath(env.ContentRootPath)
-                          .AddYamlFile("appsettings.yml", optional: false, reloadOnChange: true)
-                          .AddYamlFile($"appsettings.{env.EnvironmentName}.yml", optional: true, reloadOnChange: true)
-                          .AddEnvironmentVariables()
-                          .AddUserSecrets<Startup>()
-                          .AddCommandLine(args);
-               })
-              .ConfigureLogging((context, builder) =>
-               {
-                   var config = context.Configuration.GetSection("Logging");
-                   builder.AddConfiguration(config)
-                          .AddAxoomConsole(config)
-                          .AddExceptionDemystifyer();
-               })
-              .UseStartup<Startup>();
-
-        private static void RunInitTasks(IWebHost host)
-        {
-            using (var scope = host.Services.CreateScope())
-            {
-                var provider = scope.ServiceProvider;
-                try
-                {
-                    Startup.Init(provider);
-                }
-                catch (Exception ex)
-                {
-                    provider.GetRequiredService<ILogger<Startup>>().LogCritical(ex, "Startup.Init() failed.");
-                    throw;
-                }
-            }
-        }
+        public static IHostBuilder CreateHostBuilder(string[] args)
+            => new HostBuilder().ConfigureWebHost(x =>
+                x.UseKestrel()
+                 .ConfigureAppConfiguration((context, builder) =>
+                  {
+                      var env = context.HostingEnvironment;
+                      builder.SetBasePath(env.ContentRootPath)
+                             .AddYamlFile("appsettings.yml", optional: false, reloadOnChange: true)
+                             .AddYamlFile($"appsettings.{env.EnvironmentName}.yml", optional: true, reloadOnChange: true)
+                             .AddEnvironmentVariables()
+                             .AddUserSecrets<Startup>()
+                             .AddCommandLine(args);
+                  })
+                 .ConfigureLogging((context, builder) =>
+                  {
+                      var config = context.Configuration.GetSection("Logging");
+                      builder.AddConfiguration(config)
+                             .AddAxoomConsole(config)
+                             .AddExceptionDemystifyer();
+                  })
+                 .UseStartup<Startup>());
     }
 }

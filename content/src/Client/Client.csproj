@@ -3,8 +3,9 @@
   <PropertyGroup>
     <AssemblyName>MyVendor.MyService.Client</AssemblyName>
     <RootNamespace>MyVendor.MyService</RootNamespace>
-    <LangVersion>latest</LangVersion>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8</LangVersion>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <OutputPath>..\..\artifacts</OutputPath>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -89,7 +90,8 @@ namespace MyVendor.MyService
         public async Task Delete([FromRoute] string id)
             => await _service.DeleteAsync(id);
 
-        protected static string GetId(T entity) => GetIdMethod.Invoke(entity, null).ToString();
+        protected static string GetId(T entity)
+            => GetIdMethod.Invoke(entity, null)?.ToString() ?? throw new InvalidOperationException("Entity has no ID.");
 
         // ReSharper disable once StaticMemberInGenericType
         private static readonly MethodInfo GetIdMethod;
@@ -99,7 +101,7 @@ namespace MyVendor.MyService
             GetIdMethod = typeof(T).GetTypeInfo()
                                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                    .First(x => x.GetMethod != null && x.GetCustomAttribute<KeyAttribute>(inherit: true) != null)
-                                   .GetMethod;
+                                   .GetMethod ?? throw new InvalidOperationException("Property marked with [Key] does not have a getter.");
         }
     }
 }

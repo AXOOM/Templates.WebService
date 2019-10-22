@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace MyVendor.MyService.Infrastructure
@@ -20,7 +21,7 @@ namespace MyVendor.MyService.Infrastructure
         private readonly bool _isDevelopment;
         private readonly ILogger<ApiExceptionFilterAttribute> _logger;
 
-        public ApiExceptionFilterAttribute(IHostingEnvironment env, ILogger<ApiExceptionFilterAttribute> logger)
+        public ApiExceptionFilterAttribute(IWebHostEnvironment env, ILogger<ApiExceptionFilterAttribute> logger)
         {
             _isDevelopment = env.IsDevelopment();
             _logger = logger;

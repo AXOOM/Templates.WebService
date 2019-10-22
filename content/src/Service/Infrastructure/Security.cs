@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -26,26 +25,26 @@ namespace MyVendor.MyService.Infrastructure
 
             services.AddAuthorization(IdentityServerAuthenticationDefaults.AuthenticationScheme);
 
-            services.ConfigureSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("oauth2-implicit", new OAuth2Scheme
-                {
-                    Type = "oauth2",
-                    Flow = "implicit",
-                    AuthorizationUrl = $"{identityOptions.Authority}/connect/authorize",
-                    Scopes = ScopeAuthorizeAttribute.GetAllScopes().ToDictionary(x => x, x => "")
-                });
-                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                {
-                    ["oauth2-implicit"] = new string[0]
-                });
-            });
+//            services.ConfigureSwaggerGen(options =>
+//            {
+//                options.AddSecurityDefinition("oauth2-implicit", new OAuth2Scheme
+//                {
+//                    Type = "oauth2",
+//                    Flow = "implicit",
+//                    AuthorizationUrl = $"{identityOptions.Authority}/connect/authorize",
+//                    Scopes = ScopeAuthorizeAttribute.GetAllScopes().ToDictionary(x => x, x => "")
+//                });
+//                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+//                {
+//                    ["oauth2-implicit"] = new string[0]
+//                });
+//            });
 
             return services;
         }
 
         public static void AddAuthorization(this IServiceCollection services, string authenticationScheme)
-            => services.AddTransient<IApplicationModelProvider, AuthorizationApplicationModelProvider>()
+            => services//.AddTransient<IApplicationModelProvider, AuthorizationApplicationModelProvider>()
                        .AddAuthorizationPolicyEvaluator()
                        .AddAuthorization(options =>
                         {

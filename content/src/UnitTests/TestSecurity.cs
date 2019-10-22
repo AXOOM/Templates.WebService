@@ -45,7 +45,7 @@ namespace MyVendor.MyService
 
         public class TestAuthenticationOptions : AuthenticationSchemeOptions
         {
-            public IEnumerable<Claim> Claims { get; set; }
+            public IEnumerable<Claim> Claims { get; set; } = new List<Claim>();
         }
     }
 }

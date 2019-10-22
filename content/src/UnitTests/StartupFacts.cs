@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
@@ -41,9 +41,15 @@ namespace MyVendor.MyService
         }
 
         private void AddFrameworkServices()
-            => _services.AddSingleton<IHostingEnvironment>(new HostingEnvironment {ContentRootPath = "dummy"})
-                        .AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>()
-                        .AddSingleton(new Mock<DiagnosticSource>().Object);
+        {
+            var environment = new Mock<IWebHostEnvironment>();
+            environment.SetupGet(x => x.ApplicationName).Returns(Assembly.GetExecutingAssembly().FullName ?? "MyService");
+            environment.SetupGet(x => x.ContentRootPath).Returns("dummy");
+
+            _services.AddSingleton(environment.Object)
+                     .AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>()
+                     .AddSingleton(new Mock<DiagnosticSource>().Object);
+        }
 
         private void AddMvcControllers()
         {

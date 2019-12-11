@@ -1,6 +1,9 @@
 using System;
 using JetBrains.Annotations;
 using TypedRest;
+using TypedRest.Endpoints;
+using TypedRest.Endpoints.Generic;
+using TypedRest.Endpoints.Rpc;
 
 namespace MyVendor.MyService.Contacts
 {

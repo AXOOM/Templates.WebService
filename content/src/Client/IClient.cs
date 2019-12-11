@@ -1,5 +1,6 @@
 using MyVendor.MyService.Contacts;
-using TypedRest;
+using TypedRest.Endpoints;
+using TypedRest.Endpoints.Generic;
 
 namespace MyVendor.MyService
 {

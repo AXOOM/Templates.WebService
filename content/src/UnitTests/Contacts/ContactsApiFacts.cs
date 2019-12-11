@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using MorseCode.ITask;
 using TypedRest;
+using TypedRest.Endpoints.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -132,7 +133,7 @@ namespace MyVendor.MyService.Contacts
         public async Task PokesViaService()
         {
             AsUser("user1", Scopes.Poke);
-            await Client.Contacts["1"].Poke.TriggerAsync();
+            await Client.Contacts["1"].Poke.InvokeAsync();
 
             _serviceMock.Verify(x => x.PokeAsync("1"));
         }
@@ -140,7 +141,7 @@ namespace MyVendor.MyService.Contacts
         [Fact]
         public async Task RejectsUnauthorizedPoke()
         {
-            await Client.Contacts["1"].Poke.Awaiting(x => x.TriggerAsync())
+            await Client.Contacts["1"].Poke.Awaiting(x => x.InvokeAsync())
                         .Should().ThrowAsync<UnauthorizedAccessException>();
         }
 
@@ -148,7 +149,7 @@ namespace MyVendor.MyService.Contacts
         public async Task RejectsUnauthenticatedPoke()
         {
             AsAnonymous();
-            await Client.Contacts["1"].Poke.Awaiting(x => x.TriggerAsync())
+            await Client.Contacts["1"].Poke.Awaiting(x => x.InvokeAsync())
                         .Should().ThrowAsync<AuthenticationException>();
         }
     }

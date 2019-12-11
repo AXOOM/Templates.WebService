@@ -2,7 +2,8 @@ using System;
 using System.Net.Http;
 using Microsoft.Extensions.Options;
 using MyVendor.MyService.Contacts;
-using TypedRest;
+using TypedRest.Endpoints;
+using TypedRest.Endpoints.Generic;
 
 namespace MyVendor.MyService
 {

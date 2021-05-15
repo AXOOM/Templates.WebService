@@ -20,7 +20,7 @@ gitversion:
 
 dotnet:
   stage: build
-  image: mcr.microsoft.com/dotnet/core/sdk:2.2
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1
   script:
     - ./build.sh $GitVersion_NuGetVersion
   artifacts:
@@ -43,7 +43,7 @@ docker:
 nuget:
   stage: publish
   only: [tags, develop, master, /^release/, /^hotfix/]
-  image: mcr.microsoft.com/dotnet/core/sdk:2.2
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1
   variables:
     ARTIFACTORY_REPO: nuget
   script:
